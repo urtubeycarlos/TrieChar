@@ -16,7 +16,18 @@ public class TrieChar<V>
 	 *
 	 * Si la clave ya existía, se reemplaza su valor asociado.
 	 */
-	public void agregar(String clave, V valor) {
+	public void agregar(String clave, V valor) 
+	{
+		int i = 0;
+		Nodo<V> nodo = raiz; 
+		while(i > 0)
+		{
+			int indice = alf.indice(clave.charAt(i));
+			nodo = raiz.hijo(indice);
+			++i;
+		}
+		
+		nodo.val = valor;
 	}
 
 	/**
@@ -32,5 +43,16 @@ public class TrieChar<V>
 	 */
 	public List<V> busqueda(String prefijo) {
 		return null;
+	}
+	
+	@Override
+	public boolean equals(Object obj)
+	{
+		return false;
+	}
+	
+	public Nodo<V> getRaiz()
+	{
+		return raiz;
 	}
 }
