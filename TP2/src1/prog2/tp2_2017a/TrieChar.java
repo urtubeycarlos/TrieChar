@@ -7,15 +7,12 @@ public class TrieChar<V>
 	private Nodo<V> raiz;
 	private Alfabeto<Character> alf;
 
-	public TrieChar(Alfabeto<Character> alf) {
+	public TrieChar(Alfabeto<Character> alf) 
+	{
+		this.raiz = new Nodo<V>(alf.tam());
 		this.alf = alf;
 	}
 
-	/**
-	 * Agrega una cadena a la estructura, asociándole un determinado valor.
-	 *
-	 * Si la clave ya existía, se reemplaza su valor asociado.
-	 */
 	public void agregar(String clave, V valor) 
 	{
 		int i = 0;
@@ -30,18 +27,22 @@ public class TrieChar<V>
 		nodo.val = valor;
 	}
 
-	/**
-	 * Devuelve el valor asociado a una clave, o null si no existe.
-	 */
-	public V obtener(String clave) {
-		return null;
+	public V obtener(String clave) 
+	{
+		return obtener(clave, raiz);
 	}
-
-	/**
-	 * Devuelve una lista con todos los valores cuyas claves
-	 * empiezan por un determinado prefijo.
-	 */
-	public List<V> busqueda(String prefijo) {
+	
+	private V obtener(String clave, Nodo<V> nodoActual)
+	{
+		if(clave.equals(""))
+			return nodoActual.val;
+		
+		Character caracterActual = clave.charAt(0);
+		return obtener(clave.substring(1, clave.length()), nodoActual.hijo(alf.indice(caracterActual)));
+	}
+	
+	public List<V> busqueda(String prefijo) 
+	{
 		return null;
 	}
 	
