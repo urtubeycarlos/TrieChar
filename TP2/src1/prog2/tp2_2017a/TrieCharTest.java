@@ -11,8 +11,9 @@ public class TrieCharTest
 	{
 		Digitos digitos = new Digitos();
 		TrieChar diccionario = new TrieChar(digitos);
-		diccionario.agregar("1", "Harry Potter");
-		assertEquals(diccionario.getRaiz().hijo(1).val, "Harry Potter");
+		diccionario.agregar("12", "Harry Potter");
+		assertEquals(diccionario.obtener("12") , "Harry Potter");
+		assertEquals(diccionario.obtener("12"), "Harry Potter");
 	}
 
 }

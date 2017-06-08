@@ -9,22 +9,42 @@ public class TrieChar<V>
 
 	public TrieChar(Alfabeto<Character> alf) 
 	{
-		this.raiz = new Nodo<V>(alf.tam());
+		//hay que preguntarle al profe si podemos lo siguiente:
+		this.raiz = new Nodo<V>(alf.tam()); //nosotro agregamos esto, podemos?
 		this.alf = alf;
 	}
 
 	public void agregar(String clave, V valor) 
 	{
-		int i = 0;
-		Nodo<V> nodo = raiz; 
-		while(i > 0)
-		{
-			int indice = alf.indice(clave.charAt(i));
-			nodo = raiz.hijo(indice);
-			++i;
+		if ( raiz == null){
+			throw new RuntimeException ( "no se ha podido agregar");
 		}
+		agregar ( clave , valor , raiz);
 		
-		nodo.val = valor;
+	}
+	private void agregar ( String clave , V valor , Nodo<V> nodo)
+	{
+		//caso base, encontramos el final
+		if ( clave.equals("") ){
+			nodo.val = valor;
+			
+		}else{
+
+			Character caracterActual = clave.charAt(0);
+			int indice = alf.indice(caracterActual);
+		
+			//esta comparacion es valida? le mandamos un mail al profe?
+			//siempre que los nodos existan
+			if ( nodo.hijo(indice) != null ){
+				// substring (1) , ingnoramos el primer valor
+				agregar ( clave.substring(1) , valor , nodo.hijo(indice));
+			}else{
+				Nodo<V> nuevoHijo = new Nodo<V>( alf.tam() );
+				nodo.setHijo(indice, nuevoHijo);
+				agregar ( clave.substring(1) , valor , nodo.hijo(indice));
+			}
+		//throw new RuntimeException("cannot resolve");
+	}
 	}
 
 	public V obtener(String clave) 
@@ -56,4 +76,12 @@ public class TrieChar<V>
 	{
 		return raiz;
 	}
+//	public static void main ( String [] args ){
+//
+//		Digitos digitos = new Digitos();
+//		TrieChar diccionario = new TrieChar(digitos);
+//		diccionario.agregar("12", "Harry Potter");
+//		System.out.println(diccionario.obtener("12"));
+//		
+//	}
 }
