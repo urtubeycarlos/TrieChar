@@ -1,11 +1,13 @@
 package prog2.tp2_2017a;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TrieChar<V>
 {
 	private Nodo<V> raiz;
 	private Alfabeto<Character> alf;
+	//agregar el private claves Hashset
 
 	public TrieChar(Alfabeto<Character> alf) 
 	{
@@ -55,33 +57,70 @@ public class TrieChar<V>
 	private V obtener(String clave, Nodo<V> nodoActual)
 	{
 		if(clave.equals(""))
+		{
 			return nodoActual.val;
+			}
 		
 		Character caracterActual = clave.charAt(0);
 		return obtener(clave.substring(1, clave.length()), nodoActual.hijo(alf.indice(caracterActual)));
 	}
 	
-	public List<V> busqueda(String prefijo) 
-	{
-		return null;
+	public List<V> busqueda(String prefijo) {
+		return busqueda ( prefijo  , raiz );
 	}
 	
+	//private o public ??? queda a tu gusto.. creo q mejor private, no?
+	public ArrayList <V> ObtenerTodos ( Nodo<V> nodo , ArrayList<V> array ){
+		//tiene que tener complejidad O(c) donde C es la cantidad de claves
+		//usar un for significaria que la complejidad es O (k), donde K es la cantidadd de letras del alfabeto
+		
+		//podriamos asumir que en el peor de los casos la cantidad de claves es cuando todos los array estan llenos
+		//entonces O(c) == O (k)
+		//esta guardando los nulls
+		for ( int i = 0 ; i < alf.tam() ; i++ ){
+			if ( nodo.hijo(i) != null ){
+					array.add( nodo.hijo(i).val );
+					ObtenerTodos ( nodo.hijo(i) , array );
+			}
+		}
+		
+		return array;
+	}
+	public List<V> busqueda(String prefijo, Nodo<V> nodo ) {
+		ArrayList<V> listaclaves = new ArrayList<V> ();
+		if ( prefijo.equals("") ){
+			listaclaves = ObtenerTodos( nodo , listaclaves );
+			return listaclaves;
+		}
+		Character caracterActual = prefijo.charAt(0);
+		return busqueda ( prefijo.substring(1) , nodo.hijo( alf.indice( caracterActual) ) );
+	}
+	
+	// boolean equals, agregado por nosotros.
 	@Override
 	public boolean equals(Object obj)
 	{
 		return false;
 	}
-	
+	// hay q sacar el getrazi() depues!!
 	public Nodo<V> getRaiz()
 	{
 		return raiz;
 	}
-//	public static void main ( String [] args ){
-//
-//		Digitos digitos = new Digitos();
-//		TrieChar diccionario = new TrieChar(digitos);
-//		diccionario.agregar("12", "Harry Potter");
-//		System.out.println(diccionario.obtener("12"));
-//		
-//	}
+	public static void main ( String [] args ){
+
+		Digitos digitos = new Digitos();
+		TrieChar diccionario = new TrieChar(digitos);
+		diccionario.agregar("12", "Harry Potter");
+		diccionario.agregar("122", "Libro uno");
+		diccionario.agregar("1232" , "librakoooo");
+		diccionario.agregar("12232", "librakostosl");
+		System.out.println(diccionario.obtener("12"));
+		List lista = new ArrayList<String>();
+		lista = diccionario.busqueda("12");
+		for ( int i = 0 ; i < lista.size() ; i++){
+			System.out.println(lista.get(i));
+		}
+		
+	}
 }
