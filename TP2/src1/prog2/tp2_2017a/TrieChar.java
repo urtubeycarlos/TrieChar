@@ -36,16 +36,19 @@ public class TrieChar<V>
 			int indice = alf.indice(caracterActual);
 		
 			//esta comparacion es valida? le mandamos un mail al profe?
-			//siempre que los nodos existan
 			if ( nodo.hijo(indice) != null ){
-				// substring (1) , ingnoramos el primer valor
+				
 				agregar ( clave.substring(1) , valor , nodo.hijo(indice));
-			}else{
+				
+			}else {
+				
 				Nodo<V> nuevoHijo = new Nodo<V>( alf.tam() );
-				nodo.setHijo(indice, nuevoHijo);
-				agregar ( clave.substring(1) , valor , nodo.hijo(indice));
+				
+				nodo.setHijo( indice, nuevoHijo );
+				
+				agregar ( clave.substring(1) , valor , nodo.hijo(indice) );
 			}
-		//throw new RuntimeException("cannot resolve");
+			
 	}
 	}
 
@@ -62,7 +65,9 @@ public class TrieChar<V>
 			}
 		
 		Character caracterActual = clave.charAt(0);
-		return obtener(clave.substring(1, clave.length()), nodoActual.hijo(alf.indice(caracterActual)));
+		int indice = alf.indice(caracterActual);
+
+		return obtener(clave.substring(1) , nodoActual.hijo(indice) );
 	}
 	
 	public List<V> busqueda(String prefijo) {
@@ -73,27 +78,36 @@ public class TrieChar<V>
 	public ArrayList <V> ObtenerTodos ( Nodo<V> nodo , ArrayList<V> array ){
 		//tiene que tener complejidad O(c) donde C es la cantidad de claves
 		//usar un for significaria que la complejidad es O (k), donde K es la cantidadd de letras del alfabeto
-		
 		//podriamos asumir que en el peor de los casos la cantidad de claves es cuando todos los array estan llenos
 		//entonces O(c) == O (k)
-		//esta guardando los nulls
+		
+		if ( nodo.val != null ){
+			array.add(nodo.val);
+		}
+		
 		for ( int i = 0 ; i < alf.tam() ; i++ ){
+	
 			if ( nodo.hijo(i) != null ){
-					array.add( nodo.hijo(i).val );
-					ObtenerTodos ( nodo.hijo(i) , array );
+				ObtenerTodos ( nodo.hijo(i) , array );
 			}
 		}
 		
 		return array;
 	}
+	
 	public List<V> busqueda(String prefijo, Nodo<V> nodo ) {
+		
 		ArrayList<V> listaclaves = new ArrayList<V> ();
+		
 		if ( prefijo.equals("") ){
+			
 			listaclaves = ObtenerTodos( nodo , listaclaves );
 			return listaclaves;
 		}
+		
 		Character caracterActual = prefijo.charAt(0);
 		return busqueda ( prefijo.substring(1) , nodo.hijo( alf.indice( caracterActual) ) );
+	
 	}
 	
 	// boolean equals, agregado por nosotros.
@@ -102,7 +116,7 @@ public class TrieChar<V>
 	{
 		return false;
 	}
-	// hay q sacar el getrazi() depues!!
+	// hay q sacar el getraiz() despues!!
 	public Nodo<V> getRaiz()
 	{
 		return raiz;
@@ -115,11 +129,10 @@ public class TrieChar<V>
 		diccionario.agregar("122", "Libro uno");
 		diccionario.agregar("1232" , "librakoooo");
 		diccionario.agregar("12232", "librakostosl");
-		System.out.println(diccionario.obtener("12"));
 		List lista = new ArrayList<String>();
-		lista = diccionario.busqueda("12");
+		lista = diccionario.busqueda("1");
 		for ( int i = 0 ; i < lista.size() ; i++){
-			System.out.println(lista.get(i));
+			System.out.println("lisa pos"+i+" "+lista.get(i));
 		}
 		
 	}
