@@ -32,6 +32,9 @@ public class AlfabetoADN implements Alfabeto<Character>
 	
 	private Character getCaracter(int i)
 	{
-		return (char) (i + '0');
+		if(i < 0 || i > tam())
+			throw new IllegalArgumentException("Indice fuera de rango");
+		
+		return Base.values()[i].name().charAt(0);
 	}
 }

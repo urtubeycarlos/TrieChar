@@ -1,55 +1,53 @@
 package prog2.tp2_2017a;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 public class TrieChar<V>
 {
 	private Nodo<V> raiz;
 	private Alfabeto<Character> alf;
-	//agregar el private claves Hashset
+	private HashSet<String> claves;
 
 	public TrieChar(Alfabeto<Character> alf) 
 	{
-		//hay que preguntarle al profe si podemos lo siguiente:
-		this.raiz = new Nodo<V>(alf.tam()); //nosotro agregamos esto, podemos?
+		this.raiz = new Nodo<V>(alf.tam()); 
 		this.alf = alf;
+		this.claves = new HashSet<String>();
 	}
 
 	public void agregar(String clave, V valor) 
 	{
-		if ( raiz == null){
-			throw new RuntimeException ( "no se ha podido agregar");
-		}
-		agregar ( clave , valor , raiz);
+		if (raiz == null)
+			throw new RuntimeException ("No se ha podido agregar");
 		
+		agregar(clave, valor, raiz);
 	}
-	private void agregar ( String clave , V valor , Nodo<V> nodo)
+	private void agregar (String clave , V valor, Nodo<V> nodo)
 	{
 		//caso base, encontramos el final
-		if ( clave.equals("") ){
+		if (clave.equals(""))
+		{
 			nodo.val = valor;
-			
 		}else{
 
 			Character caracterActual = clave.charAt(0);
 			int indice = alf.indice(caracterActual);
 		
 			//esta comparacion es valida? le mandamos un mail al profe?
-			if ( nodo.hijo(indice) != null ){
-				
+			if (nodo.hijo(indice) != null)
+			{
 				agregar ( clave.substring(1) , valor , nodo.hijo(indice));
 				
 			}else {
 				
-				Nodo<V> nuevoHijo = new Nodo<V>( alf.tam() );
-				
+				Nodo<V> nuevoHijo = new Nodo<V>(alf.tam());
 				nodo.setHijo( indice, nuevoHijo );
 				
 				agregar ( clave.substring(1) , valor , nodo.hijo(indice) );
 			}
-			
-	}
+		}
 	}
 
 	public V obtener(String clave) 
@@ -62,7 +60,7 @@ public class TrieChar<V>
 		if(clave.equals(""))
 		{
 			return nodoActual.val;
-			}
+		}
 		
 		Character caracterActual = clave.charAt(0);
 		int indice = alf.indice(caracterActual);
@@ -70,70 +68,72 @@ public class TrieChar<V>
 		return obtener(clave.substring(1) , nodoActual.hijo(indice) );
 	}
 	
-	public List<V> busqueda(String prefijo) {
-		return busqueda ( prefijo  , raiz );
+	public List<V> busqueda(String prefijo) 
+	{
+		return busqueda (prefijo, raiz);
 	}
 	
-	//private o public ??? queda a tu gusto.. creo q mejor private, no?
-	public ArrayList <V> ObtenerTodos ( Nodo<V> nodo , ArrayList<V> array ){
+	
+	private ArrayList <V> obtenerTodos (Nodo<V> nodo , ArrayList<V> arreglo)
+	{
 		//tiene que tener complejidad O(c) donde C es la cantidad de claves
 		//usar un for significaria que la complejidad es O (k), donde K es la cantidadd de letras del alfabeto
 		//podriamos asumir que en el peor de los casos la cantidad de claves es cuando todos los array estan llenos
 		//entonces O(c) == O (k)
 		
-		if ( nodo.val != null ){
-			array.add(nodo.val);
+		if (nodo.val != null)
+		{
+			arreglo.add(nodo.val);
 		}
 		
-		for ( int i = 0 ; i < alf.tam() ; i++ ){
+		for (int i=0 ; i<alf.tam(); i++)
+		{
 	
-			if ( nodo.hijo(i) != null ){
-				ObtenerTodos ( nodo.hijo(i) , array );
+			if ( nodo.hijo(i) != null )
+			{
+				obtenerTodos ( nodo.hijo(i) , arreglo );
 			}
 		}
 		
-		return array;
+		return arreglo;
 	}
 	
-	public List<V> busqueda(String prefijo, Nodo<V> nodo ) {
+	public List<V> busqueda(String prefijo, Nodo<V> nodo )
+	{	
+		ArrayList<V> listaClaves = new ArrayList<V>();
 		
-		ArrayList<V> listaclaves = new ArrayList<V> ();
-		
-		if ( prefijo.equals("") ){
-			
-			listaclaves = ObtenerTodos( nodo , listaclaves );
-			return listaclaves;
+		if (prefijo.equals(""))
+		{
+			listaClaves = obtenerTodos( nodo , listaClaves );
+			return listaClaves;
 		}
 		
 		Character caracterActual = prefijo.charAt(0);
 		return busqueda ( prefijo.substring(1) , nodo.hijo( alf.indice( caracterActual) ) );
-	
 	}
 	
-	// boolean equals, agregado por nosotros.
 	@Override
 	public boolean equals(Object obj)
 	{
-		return false;
-	}
-	// hay q sacar el getraiz() despues!!
-	public Nodo<V> getRaiz()
-	{
-		return raiz;
-	}
-	public static void main ( String [] args ){
-
-		Digitos digitos = new Digitos();
-		TrieChar diccionario = new TrieChar(digitos);
-		diccionario.agregar("12", "Harry Potter");
-		diccionario.agregar("122", "Libro uno");
-		diccionario.agregar("1232" , "librakoooo");
-		diccionario.agregar("12232", "librakostosl");
-		List lista = new ArrayList<String>();
-		lista = diccionario.busqueda("1");
-		for ( int i = 0 ; i < lista.size() ; i++){
-			System.out.println("lisa pos"+i+" "+lista.get(i));
+		if(obj == null)
+			return false;
+		
+		@SuppressWarnings("unchecked")
+		TrieChar<V> t2 = (TrieChar<V>) obj;
+		
+		if(!(alf.equals(t2.alf)))
+			return false;
+		
+		if(claves.size() != t2.claves.size() || !claves.equals(t2.claves))
+			return false;
+		
+		boolean ret = true;
+		
+		for(String c : claves)
+		{
+				ret = ret && this.obtener(c).equals(t2.obtener(c));
 		}
 		
+		return ret;
 	}
 }
