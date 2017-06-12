@@ -19,11 +19,13 @@ public class TrieChar<V>
 
 	public void agregar(String clave, V valor) 
 	{
+		claves.add(clave);
 		if (raiz == null)
 			throw new RuntimeException ("No se ha podido agregar");
 		
 		agregar(clave, valor, raiz);
 	}
+	
 	private void agregar (String clave , V valor, Nodo<V> nodo)
 	{
 		//caso base, encontramos el final
