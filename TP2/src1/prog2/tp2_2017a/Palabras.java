@@ -1,5 +1,7 @@
 package prog2.tp2_2017a;
 
+//FIXME: Es un copy-paste de Digitos!!!
+
 public class Palabras implements Alfabeto<Character>
 {
 	
@@ -12,7 +14,7 @@ public class Palabras implements Alfabeto<Character>
 		if (elem >= '0' && elem <= '9')
 			return elem - '0';
 
-		throw new RuntimeException("digito no válido: " + elem);
+		throw new RuntimeException("digito no vÃ¡lido: " + elem);
 	}
 	
 	@Override
