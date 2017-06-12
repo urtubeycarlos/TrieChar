@@ -14,4 +14,26 @@ public class Palabras implements Alfabeto<Character>
 
 		throw new RuntimeException("digito no válido: " + elem);
 	}
+	
+	@Override
+	public boolean equals(Object o)
+	{
+		Palabras d2 = (Palabras) o;
+		
+		if(d2.tam() != tam())
+			return false;
+		
+		boolean ret = true;
+		for(int i=0; i<tam(); ++i)
+		{
+			ret = ret && this.getCaracter(i).equals(d2.getCaracter(i));
+		}
+		
+		return ret;
+	}
+	
+	private Character getCaracter(int i)
+	{
+		return (char) (i + '0');
+	}
 }
