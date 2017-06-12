@@ -34,6 +34,9 @@ public class Palabras implements Alfabeto<Character>
 	
 	private Character getCaracter(int i)
 	{
+		if(i < 0 || i > tam())
+			throw new IllegalArgumentException("Indice fuera de rango");
+		
 		return (char) (i + '0');
 	}
 }
